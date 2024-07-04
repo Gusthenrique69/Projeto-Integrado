@@ -52,6 +52,8 @@
                     <button type="submit">Cadastrar</button>
                 </div>
             </form>
+            <div id="userList"></div>
+            <button id="chatButton" style="display:none;" onclick="openWhatsAppChat()">Abrir Chat Online</button>
         </section>
     </main>
 
@@ -81,6 +83,84 @@
         Desenvolvido por <p>Gustavo Henrique, Marcus Vinicius e Brayan</p>
     </div>
 
-    <script src="Agroinfa.js"></script>
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            const form = document.getElementById("cadastroForm");
+
+            form.addEventListener("submit", function(event) {
+                event.preventDefault();
+
+                const nome = document.getElementById("nome").value;
+                const email = document.getElementById("email").value;
+                const telefone = document.getElementById("telefone").value;
+                const endereco = document.getElementById("endereco").value;
+                const senha = document.getElementById("senha").value;
+
+                const user = {
+                    id: Date.now(),
+                    nome: nome,
+                    email: email,
+                    telefone: telefone,
+                    endereco: endereco,
+                    senha: senha
+                };
+
+                const users = JSON.parse(localStorage.getItem("users")) || [];
+                users.push(user);
+                localStorage.setItem("users", JSON.stringify(users));
+
+                alert("Cadastro realizado com sucesso!");
+                form.reset();
+                displayUsers();
+                document.getElementById("chatButton").style.display = "block";
+            });
+
+            function displayUsers() {
+                const users = JSON.parse(localStorage.getItem("users")) || [];
+                const userList = document.getElementById("userList");
+                userList.innerHTML = '';
+
+                users.forEach(user => {
+                    const userDiv = document.createElement("div");
+                    userDiv.innerHTML = `
+                        <p>Nome: ${user.nome}</p>
+                        <p>Email: ${user.email}</p>
+                        <p>Telefone: ${user.telefone}</p>
+                        <p>Endereço: ${user.endereco}</p>
+                        <button onclick="editUser(${user.id})">Editar</button>
+                        <button onclick="deleteUser(${user.id})">Deletar</button>
+                        <hr>
+                    `;
+                    userList.appendChild(userDiv);
+                });
+            }
+
+            window.editUser = function(id) {
+                const users = JSON.parse(localStorage.getItem("users")) || [];
+                const user = users.find(user => user.id === id);
+
+                document.getElementById("nome").value = user.nome;
+                document.getElementById("email").value = user.email;
+                document.getElementById("telefone").value = user.telefone;
+                document.getElementById("endereco").value = user.endereco;
+                document.getElementById("senha").value = user.senha;
+
+                deleteUser(id);
+            };
+
+            window.deleteUser = function(id) {
+                let users = JSON.parse(localStorage.getItem("users")) || [];
+                users = users.filter(user => user.id !== id);
+                localStorage.setItem("users", JSON.stringify(users));
+                displayUsers();
+            };
+
+            window.openWhatsAppChat = function() {
+                window.open("https://wa.me/5561991962369", "_blank");
+            };
+
+            displayUsers();
+        });
+    </script>
 </body>
 </html>
