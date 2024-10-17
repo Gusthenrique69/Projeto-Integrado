@@ -8,5 +8,4 @@ CREATE TABLE usuarios (
     CPF VARCHAR(14) NOT NULL,
     Endereço VARCHAR(45) NOT NULL,
     email VARCHAR(200) NOT NULL,
-    senha VARCHAR(15) NOT NULL
-);
+    senha VARCHAR(15) NOT NULL);
