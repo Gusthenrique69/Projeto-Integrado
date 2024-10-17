@@ -74,28 +74,34 @@
         </div>
         <div>
             <strong class="titulo">Encontre-nos</strong>
-            <p>WhatsApp: <a href="https://wa.me/5561991962369" target="_blank">(61) 99196-2369</a></p>
             <p>Email: <a href="mailto:contato@agroinfa.com">contato@agroinfa.com</a></p>
             <p>Endereço: Qms 45 Conjunto A loja 22 setor de mansões - Sobradinho</p>
         </div>
     </footer>
     <div id="copyright">
-        Desenvolvido por <p>Gustavo Henrique, Marcus Vinicius e Brayan</p>
+        Desenvolvido por <p>Gustavo Henrique</p>
     </div>
 
     <script>
         document.addEventListener("DOMContentLoaded", function() {
             const form = document.getElementById("cadastroForm");
-
+    
             form.addEventListener("submit", function(event) {
                 event.preventDefault();
-
+    
                 const nome = document.getElementById("nome").value;
                 const email = document.getElementById("email").value;
                 const telefone = document.getElementById("telefone").value;
                 const endereco = document.getElementById("endereco").value;
                 const senha = document.getElementById("senha").value;
-
+    
+                // Validação da senha
+                const senhaRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[A-Za-z\d]{8,}$/;
+                if (!senhaRegex.test(senha)) {
+                    alert("A senha deve conter pelo menos uma letra maiúscula, uma letra minúscula, um número e não pode conter caracteres especiais.");
+                    return; // Interrompe o fluxo de execução se a senha for inválida
+                }
+    
                 const user = {
                     id: Date.now(),
                     nome: nome,
@@ -104,22 +110,22 @@
                     endereco: endereco,
                     senha: senha
                 };
-
+    
                 const users = JSON.parse(localStorage.getItem("users")) || [];
                 users.push(user);
                 localStorage.setItem("users", JSON.stringify(users));
-
+    
                 alert("Cadastro realizado com sucesso!");
                 form.reset();
                 displayUsers();
                 document.getElementById("chatButton").style.display = "block";
             });
-
+    
             function displayUsers() {
                 const users = JSON.parse(localStorage.getItem("users")) || [];
                 const userList = document.getElementById("userList");
                 userList.innerHTML = '';
-
+    
                 users.forEach(user => {
                     const userDiv = document.createElement("div");
                     userDiv.innerHTML = `
@@ -134,33 +140,34 @@
                     userList.appendChild(userDiv);
                 });
             }
-
+    
             window.editUser = function(id) {
                 const users = JSON.parse(localStorage.getItem("users")) || [];
                 const user = users.find(user => user.id === id);
-
+    
                 document.getElementById("nome").value = user.nome;
                 document.getElementById("email").value = user.email;
                 document.getElementById("telefone").value = user.telefone;
                 document.getElementById("endereco").value = user.endereco;
                 document.getElementById("senha").value = user.senha;
-
+    
                 deleteUser(id);
             };
-
+    
             window.deleteUser = function(id) {
                 let users = JSON.parse(localStorage.getItem("users")) || [];
                 users = users.filter(user => user.id !== id);
                 localStorage.setItem("users", JSON.stringify(users));
                 displayUsers();
             };
-
+    
             window.openWhatsAppChat = function() {
                 window.open("https://wa.me/5561991962369", "_blank");
             };
-
+    
             displayUsers();
         });
     </script>
+    
 </body>
 </html>
