@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Agendamento Online</title>
+    <link rel="stylesheet" href="cadastroagroinfa.css">
+</head>
+<body>
+    <header>
+        <a href="Agroinfa.html">
+            <img src="logo.jpg" alt="Agroinfa" width="150" height="70">
+        </a>
+        <nav>
+            <a href="Agroinfa.html">Início</a>
+            <a href="#clinica">Clínica</a>
+            <a href="#duvidas">Dúvidas</a>
+        </nav>
+    </header>
+
+    <main>
+        <h1>Agendamento Online</h1>
+        <div id="scheduleList"></div>
+        <button id="backToProfile" style="display:none;" onclick="returnToProfile()">Voltar ao Perfil</button>
+    </main>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const horarios = [
+                "Segunda-feira: 09:00 - 10:00",
+                "Terça-feira: 11:00 - 12:00",
+                "Quarta-feira: 14:00 - 15:00",
+                "Quinta-feira: 16:00 - 17:00",
+                "Sexta-feira: 13:00 - 14:00"
+            ];
+
+            const scheduleList = document.getElementById("scheduleList");
+
+            horarios.forEach(horario => {
+                const div = document.createElement("div");
+                div.textContent = horario;
+                const button = document.createElement("button");
+                button.textContent = "Selecionar";
+                button.onclick = () => {
+                    alert(`Agendado para: ${horario}`);
+                    localStorage.setItem("horarioAgendado", horario);
+                    document.getElementById("backToProfile").style.display = "block";
+                };
+                div.appendChild(button);
+                scheduleList.appendChild(div);
+            });
+        });
+
+        function returnToProfile() {
+            window.location.href = "Perfil.html";
+        }
+    </script>
+
+</footer>
+<div id="copyright">
+Desenvolvido por <p>Gustavo Henrique L. Siqueira </p>
+</div>
+
+<script src="Agroinfa.js"></script>
+</body>
+</html>
