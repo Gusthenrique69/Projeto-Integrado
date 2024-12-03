@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Perfil</title>
+    <link rel="stylesheet" href="cadastroagroinfa.css">
+</head>
+<body>
+    <header>
+        <a href="Agroinfa.html">
+            <img src="logo.jpg" alt="Agroinfa" width="150" height="70">
+        </a>
+        <nav>
+            <a href="Agroinfa.html">Início</a>
+            <a href="#clinica">Clínica</a>
+            <a href="#duvidas">Dúvidas</a>
+        </nav>
+    </header>
+
+    <main>
+        <h1>Perfil</h1>
+        
+        <!-- Dados do usuário -->
+        <div id="userDetails"></div>
+        
+        <!-- Detalhes do agendamento -->
+        <div id="scheduleDetails" style="margin-top:20px;"></div>
+
+        <!-- Botões de ações -->
+        <button onclick="openWhatsAppChat()">Abrir Chat Online</button>
+        <button onclick="openSchedulePage()">Agendamento Online</button>
+        <button id="editProfileButton" onclick="editProfile()">Editar Cadastro</button>
+        <button id="saveProfileButton" onclick="saveProfile()" style="display:none;">Salvar Cadastro</button>
+        <button id="deleteProfileButton" onclick="deleteProfile()">Excluir Cadastro</button>
+    </main>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const user = JSON.parse(localStorage.getItem("currentUser"));
+            const horarioAgendado = localStorage.getItem("horarioAgendado");
+
+            if (!user) {
+                alert("Nenhum usuário encontrado. Redirecionando para o cadastro.");
+                window.location.href = "CadastroAgroinfa.html";
+                return;
+            }
+
+            // Exibe os dados do usuário na tela
+            const userDetails = document.getElementById("userDetails");
+            userDetails.innerHTML = `
+                <div id="nomeDisplay"><strong>Nome:</strong> ${user.nome}</div>
+                <div id="emailDisplay"><strong>Email:</strong> ${user.email}</div>
+                <div id="telefoneDisplay"><strong>Telefone:</strong> ${user.telefone}</div>
+                <div id="enderecoDisplay"><strong>Endereço:</strong> ${user.endereco}</div>
+            `;
+
+            // Exibe os detalhes do agendamento
+            if (horarioAgendado) {
+                const scheduleDetails = document.getElementById("scheduleDetails");
+                scheduleDetails.innerHTML = `<p><strong>Horário Agendado:</strong> ${horarioAgendado}</p>`;
+            }
+        });
+
+        function openWhatsAppChat() {
+            window.open("https://wa.me/5561991962369", "_blank");
+        }
+
+        function openSchedulePage() {
+            window.location.href = "AgendamentoOnline.html";
+        }
+
+        function editProfile() {
+            const user = JSON.parse(localStorage.getItem("currentUser"));
+
+            if (!user) {
+                alert("Nenhum usuário encontrado para editar.");
+                return;
+            }
+
+            // Exibir os campos de edição
+            document.getElementById("userDetails").innerHTML = `
+                <div><label>Nome:</label> <input type="text" id="nome" value="${user.nome}"></div>
+                <div><label>Email:</label> <input type="email" id="email" value="${user.email}"></div>
+                <div><label>Telefone:</label> <input type="tel" id="telefone" value="${user.telefone}"></div>
+                <div><label>Endereço:</label> <input type="text" id="endereco" value="${user.endereco}"></div>
+            `;
+            
+            // Esconde o botão "Editar Cadastro" e exibe o botão "Salvar Cadastro"
+            document.getElementById("editProfileButton").style.display = "none";
+            document.getElementById("saveProfileButton").style.display = "inline-block";
+        }
+
+        function saveProfile() {
+            const nome = document.getElementById("nome").value;
+            const email = document.getElementById("email").value;
+            const telefone = document.getElementById("telefone").value;
+            const endereco = document.getElementById("endereco").value;
+
+            // Validações básicas
+            if (!nome || !email || !telefone || !endereco) {
+                alert("Por favor, preencha todos os campos.");
+                return;
+            }
+
+            // Atualiza os dados no localStorage
+            const user = {
+                nome: nome,
+                email: email,
+                telefone: telefone,
+                endereco: endereco
+            };
+
+            localStorage.setItem("currentUser", JSON.stringify(user));
+
+            // Exibe os dados atualizados e oculta o formulário de edição
+            document.getElementById("userDetails").innerHTML = `
+                <div><strong>Nome:</strong> ${nome}</div>
+                <div><strong>Email:</strong> ${email}</div>
+                <div><strong>Telefone:</strong> ${telefone}</div>
+                <div><strong>Endereço:</strong> ${endereco}</div>
+            `;
+
+            // Exibe novamente o botão de editar
+            document.getElementById("editProfileButton").style.display = "inline-block";
+            document.getElementById("saveProfileButton").style.display = "none";
+        }
+
+        function deleteProfile() {
+            const confirmation = confirm("Tem certeza que deseja excluir seu cadastro? Essa ação não pode ser desfeita.");
+
+            if (confirmation) {
+                localStorage.removeItem("currentUser");
+                alert("Cadastro excluído com sucesso.");
+                window.location.href = "CadastroAgroinfa.html";
+            }
+        }
+    </script>
+
+</footer>
+<div id="copyright">
+Desenvolvido por <p>Gustavo Henrique L. Siqueira </p>
+</div>
+
+<script src="Agroinfa.js"></script>
+</body>
+</html>
